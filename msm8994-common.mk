@@ -228,7 +228,7 @@ PRODUCT_PACKAGES += \
 # RIL
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.0-service \
-    libaudioclient_shim \
+    libaudioclient_msm8994_shim \
     libbase_shim \
     libandroid_net \
     libjson \
