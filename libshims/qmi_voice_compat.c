@@ -4,8 +4,20 @@
 #include <fcntl.h>
 #include <link.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+/* The shim stays loaded in rild, but must not be inherited by its system/bin/sh
+ * children: the system namespace cannot load this private vendor library. */
+__attribute__((constructor)) static void clear_inherited_preload(void)
+{
+    const char *preload = getenv("LD_PRELOAD");
+
+    if (preload != NULL &&
+        strcmp(preload, "/vendor/lib64/libqmi_voice_compat.so") == 0)
+        unsetenv("LD_PRELOAD");
+}
 
 /* QCRIL first connects to pm-service over /dev/vndbinder. Android 13's
  * libhardware_legacy then searches for SystemSuspend on the same Binder
