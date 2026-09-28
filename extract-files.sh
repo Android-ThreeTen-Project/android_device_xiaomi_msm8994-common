@@ -23,6 +23,9 @@ source "${HELPER}"
 
 function blob_fixup() {
     case "${1}" in
+        vendor/lib64/gps_legacy/libqmi_cci.so)
+            python3 "${MY_DIR}/blob_fixups/qmi_cci_ctrl_port.py" "${2}"
+            ;;
         vendor/lib/libmmcamera2_stats_modules.so)
             # Camera's NDK sensor/looper imports are supplied by the vendor bridge.
             "${PATCHELF}" --replace-needed libandroid.so libsensorndkbridge.so "${2}"
