@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-#include <string>
-#define ANDROID_ATOMIC_INLINE
-extern "C" {
-#include <cutils/atomic.h>
+#include <stdint.h>
+
+// Modern cutils/atomic.h defines this as static inline. Including that header
+// no longer exports the legacy ABI required by Libra's camera blobs.
+extern "C" int32_t android_atomic_acquire_load(volatile const int32_t* addr) {
+    return __atomic_load_n(addr, __ATOMIC_ACQUIRE);
 }

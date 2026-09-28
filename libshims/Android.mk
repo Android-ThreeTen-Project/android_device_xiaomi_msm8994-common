@@ -24,6 +24,8 @@ include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := IPowerManager.cpp
 LOCAL_MODULE := libshim_powermanager
+# Legacy display blobs also request this library by the old framework name.
+LOCAL_MODULE_SYMLINKS := libpowermanager.so
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 LOCAL_SHARED_LIBRARIES := libbinder libutils
 LOCAL_CPPFLAGS := -DDO_NOT_CHECK_MANUAL_BINDER_INTERFACES

@@ -5,3 +5,20 @@ cc_library_shared {
     vendor: true,
     compile_multilib: "64",
 }
+
+// Keep the legacy C++ runtime filename without changing the system runtime.
+install_symlink {
+    name: "msm8994-libstdc++-link32",
+    vendor: true,
+    installed_location: "lib/libstdc++.so",
+    symlink_target: "libstdc++_vendor.so",
+    required: ["libstdc++_vendor"],
+}
+
+install_symlink {
+    name: "msm8994-libstdc++-link64",
+    vendor: true,
+    installed_location: "lib64/libstdc++.so",
+    symlink_target: "libstdc++_vendor.so",
+    required: ["libstdc++_vendor"],
+}

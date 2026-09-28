@@ -34,6 +34,8 @@ LOCAL_SRC_FILES += \
         HAL/QCameraThermalAdapter.cpp
 
 LOCAL_CFLAGS := -Wall -Wextra -Werror
+# Newer Clang diagnoses legacy QCamera2 bookkeeping assignments as unused.
+LOCAL_CFLAGS += -Wno-error=unused-but-set-variable
 LOCAL_CFLAGS += -DHAS_MULTIMEDIA_HINTS
 # Legacy QCamera2 uses String8::string() and String8::isEmpty().
 LOCAL_CFLAGS += -DENABLE_STRING8_OBSOLETE_METHODS
@@ -67,20 +69,28 @@ LOCAL_C_INCLUDES += \
         frameworks/native/include/media/hardware \
         $(LOCAL_PATH)/HAL
 
-LOCAL_HEADER_LIBRARIES := display_headers generated_kernel_headers
+LOCAL_HEADER_LIBRARIES := display_headers generated_kernel_headers media_plugin_headers
 
 #LOCAL_STATIC_LIBRARIES := libqcamera2_util
 LOCAL_C_INCLUDES += \
         $(TARGET_OUT_HEADERS)/qcom/display
 
-LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl
+# Only the metadata and camera1 parameter classes are needed from the framework.
+# Compile them into the vendor HAL to avoid a dependency on libcamera_client.
+LOCAL_SRC_FILES += \
+        ../../../../../frameworks/av/camera/CameraMetadata.cpp \
+        ../../../../../frameworks/av/camera/CameraParameters.cpp \
+        ../../../../../frameworks/av/camera/VendorTagDescriptor.cpp
+LOCAL_C_INCLUDES += frameworks/av/camera/include system/media/private/camera/include
+
+LOCAL_SHARED_LIBRARIES := libbinder liblog libhardware libutils libcutils libdl
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface libui libcamera_metadata
-LOCAL_SHARED_LIBRARIES += libqdMetaData.camera libnativewindow
+LOCAL_SHARED_LIBRARIES += libqdMetaData libnativewindow
 
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS := optional
-LOCAL_VENDOR_MODULE := false
+LOCAL_VENDOR_MODULE := true
 
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 include $(BUILD_SHARED_LIBRARY)

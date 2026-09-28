@@ -23,6 +23,14 @@ source "${HELPER}"
 
 function blob_fixup() {
     case "${1}" in
+        vendor/lib/libmmcamera2_stats_modules.so)
+            # Camera's NDK sensor/looper imports are supplied by the vendor bridge.
+            "${PATCHELF}" --replace-needed libandroid.so libsensorndkbridge.so "${2}"
+            ;;
+        vendor/bin/fidodaemon)
+            # No AndroidRuntime/JNI imports; avoid loading the private runtime.
+            "${PATCHELF}" --remove-needed libandroid_runtime.so "${2}"
+            ;;
         product/lib64/lib-imsvideocodec.so)
             if ! "${PATCHELF}" --print-needed "${2}" | grep -q '^libui_shim.so$'; then
                 "${PATCHELF}" --add-needed libui_shim.so "${2}"

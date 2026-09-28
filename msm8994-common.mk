@@ -116,7 +116,9 @@ PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
     android.hidl.manager@1.0 \
     libhidltransport \
-    libhwbinder
+    libhwbinder \
+    libhidltransport.vendor \
+    libhwbinder.vendor
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -312,3 +314,15 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.sh \
     ueventd.qcom.rc \
     init.qcom.post_boot.sh
+
+# Legacy vendor daemons need these vendor variants outside the LLNDK set.
+PRODUCT_PACKAGES += \
+    libsqlite.vendor \
+    libnetutils.vendor \
+    libgui.vendor \
+    android.system.net.netd@1.0.vendor \
+    android.hidl.base@1.0.vendor \
+    libsensorndkbridge \
+    libstdc++_vendor \
+    msm8994-libstdc++-link32 \
+    msm8994-libstdc++-link64

@@ -1,0 +1,4 @@
+# Camera's vendor NDK sensor bridge uses the framework AIDL sensor service.
+allow mm-qcamerad fwk_sensor_service:service_manager find;
+# Sensor events are delivered from system_server through AIDL callbacks.
+allow system_server mm-qcamerad:binder call;
