@@ -317,6 +317,8 @@ PRODUCT_PACKAGES += \
     init.qcom.post_boot.sh
 
 # Legacy vendor daemons need these vendor variants outside the LLNDK set.
+PRODUCT_SOONG_NAMESPACES += device/xiaomi/msm8994-common/libshims
+
 PRODUCT_PACKAGES += \
     libsqlite.vendor \
     libnetutils.vendor \

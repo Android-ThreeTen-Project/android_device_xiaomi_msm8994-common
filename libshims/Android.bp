@@ -1,3 +1,6 @@
+soong_namespace {
+}
+
 cc_library_shared {
     name: "libqmi_voice_compat",
     srcs: ["qmi_voice_compat.c"],
